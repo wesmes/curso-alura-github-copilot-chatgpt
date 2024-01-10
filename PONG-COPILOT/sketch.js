@@ -3,8 +3,8 @@
 
 // Criar classe Raquete com construtor e métodos update e draw
 class Raquete {
-    constructor() {
-        this.x = 30;
+    constructor(x) {
+        this.x = x;
         this.y = height / 2;
         this.width = 10;
         this.height = 60;
@@ -12,15 +12,40 @@ class Raquete {
     }
 
     update() {
-        // mover raquete para cima
-        if (keyIsDown(UP_ARROW)) {
-            this.y -= this.speed;
+
+        // se a raquete for o player 1
+        if (this.x < width / 2) {
+            // mover raquete para cima
+            if (keyIsDown(87)) {
+                this.y -= this.speed;
+            }
+
+            // mover a esquerda para baixo
+            if (keyIsDown(83)) {
+                this.y += this.speed;
+            }
+        } // senão a raquete é o player 2
+        else {
+            // mover raquete para cima
+            if (keyIsDown(UP_ARROW)) {
+                this.y -= this.speed;
+            }
+
+            // mover a esquerda para baixo
+            if (keyIsDown(DOWN_ARROW)) {
+                this.y += this.speed;
+            }
         }
 
-        // mover a esquerda para baixo
-        if (keyIsDown(DOWN_ARROW)) {
-            this.y += this.speed;
-        }
+        // mover raquete para cima
+        // if (keyIsDown(UP_ARROW)) {
+        //     this.y -= this.speed;
+        // }
+
+        // // mover a esquerda para baixo
+        // if (keyIsDown(DOWN_ARROW)) {
+        //     this.y += this.speed;
+        // }
 
         // limitar a raquete para não sair da tela
         if (this.y < 0) {
@@ -37,8 +62,9 @@ class Raquete {
             bola.y - bola.radius < this.y + this.height &&
             bola.y + bola.radius > this.y) {
             bola.vx *= -1;
+            bola.vx *= 1.1;
         }
-
+        
     }
 
     draw() {
@@ -93,7 +119,8 @@ function setup() {
     createCanvas(800, 400);
     background(0);
     bola = new Bola();
-    player1 = new Raquete();
+    player1 = new Raquete(30);
+    player2 = new Raquete(width - 30 - 10);
 }
 
 // função draw do p5.js
@@ -103,5 +130,7 @@ function draw() {
     bola.update();
     bola.draw();
     player1.update();
-    player1.draw();
+    player1.draw();    
+    player2.update();
+    player2.draw();
 }
