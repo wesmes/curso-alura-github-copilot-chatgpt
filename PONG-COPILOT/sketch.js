@@ -1,6 +1,52 @@
 // código base do p5.js para o projeto Pong Copilot
 // Autor: Weslley Gomes
 
+// Criar classe Raquete com construtor e métodos update e draw
+class Raquete {
+    constructor() {
+        this.x = 30;
+        this.y = height / 2;
+        this.width = 10;
+        this.height = 60;
+        this.speed = 5;
+    }
+
+    update() {
+        // mover raquete para cima
+        if (keyIsDown(UP_ARROW)) {
+            this.y -= this.speed;
+        }
+
+        // mover a esquerda para baixo
+        if (keyIsDown(DOWN_ARROW)) {
+            this.y += this.speed;
+        }
+
+        // limitar a raquete para não sair da tela
+        if (this.y < 0) {
+            this.y = 0;
+        }
+
+        if (this.y > height - this.height) {
+            this.y = height - this.height;
+        }
+
+        // se a bola tocar na raquete, inverte a velocidade
+        if (bola.x - bola.radius < this.x + this.width &&
+            bola.x + bola.radius > this.x &&
+            bola.y - bola.radius < this.y + this.height &&
+            bola.y + bola.radius > this.y) {
+            bola.vx *= -1;
+        }
+
+    }
+
+    draw() {
+        fill(255);
+        rect(this.x, this.y, this.width, this.height);
+    }
+}
+
 class Bola {
     constructor() {
         this.x = width / 2;
@@ -38,14 +84,16 @@ class Bola {
     }
 }
 
-// cria uma nova bola
 let bola;
+let player1;
+let player2;
 
 // função setup do p5.js
 function setup() {
     createCanvas(800, 400);
     background(0);
     bola = new Bola();
+    player1 = new Raquete();
 }
 
 // função draw do p5.js
@@ -54,4 +102,6 @@ function draw() {
     background(0);
     bola.update();
     bola.draw();
+    player1.update();
+    player1.draw();
 }
