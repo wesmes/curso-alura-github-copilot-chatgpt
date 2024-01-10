@@ -12,59 +12,39 @@ class Raquete {
     }
 
     update() {
-
-        // se a raquete for o player 1
+        // Player 1 controls
         if (this.x < width / 2) {
-            // mover raquete para cima
-            if (keyIsDown(87)) {
+            if (keyIsDown(87)) { // 'W' key to move up
                 this.y -= this.speed;
             }
-
-            // mover a esquerda para baixo
-            if (keyIsDown(83)) {
+            if (keyIsDown(83)) { // 'S' key to move down
                 this.y += this.speed;
             }
-        } // senão a raquete é o player 2
+        } 
+        // Player 2 controls
         else {
-            // mover raquete para cima
-            if (keyIsDown(UP_ARROW)) {
+            if (keyIsDown(UP_ARROW)) { // Up arrow key to move up
                 this.y -= this.speed;
             }
-
-            // mover a esquerda para baixo
-            if (keyIsDown(DOWN_ARROW)) {
+            if (keyIsDown(DOWN_ARROW)) { // Down arrow key to move down
                 this.y += this.speed;
             }
         }
 
-        // mover raquete para cima
-        // if (keyIsDown(UP_ARROW)) {
-        //     this.y -= this.speed;
-        // }
+        // Prevent the paddle from going off screen
+        this.y = constrain(this.y, 0, height - this.height);
 
-        // // mover a esquerda para baixo
-        // if (keyIsDown(DOWN_ARROW)) {
-        //     this.y += this.speed;
-        // }
-
-        // limitar a raquete para não sair da tela
-        if (this.y < 0) {
-            this.y = 0;
+        // If the ball hits the paddle, reverse and increase its speed
+        if (this.isBallHit()) {
+            bola.vx *= -1.1;
         }
+    }
 
-        if (this.y > height - this.height) {
-            this.y = height - this.height;
-        }
-
-        // se a bola tocar na raquete, inverte a velocidade
-        if (bola.x - bola.radius < this.x + this.width &&
-            bola.x + bola.radius > this.x &&
-            bola.y - bola.radius < this.y + this.height &&
-            bola.y + bola.radius > this.y) {
-            bola.vx *= -1;
-            bola.vx *= 1.1;
-        }
-        
+    isBallHit() {
+        return bola.x - bola.radius < this.x + this.width &&
+               bola.x + bola.radius > this.x &&
+               bola.y - bola.radius < this.y + this.height &&
+               bola.y + bola.radius > this.y;
     }
 
     draw() {
@@ -75,13 +55,11 @@ class Raquete {
 
 class Bola {
     constructor() {
-        this.x = width / 2;
-        this.y = height / 2;
         this.radius = 25;
-        this.vx = Math.random() * 10 - 5;
-        this.vy = Math.random() * 10 - 5;
+        this.reset();
     }
 
+    // Resets the ball to the center of the screen with a random direction
     reset() {
         this.x = width / 2;
         this.y = height / 2;
@@ -89,21 +67,23 @@ class Bola {
         this.vy = Math.random() * 10 - 5;
     }
 
+    // Updates the ball's position and checks for collisions with the screen edges
     update() {
         this.x += this.vx;
         this.y += this.vy;
 
-        // se tocar na borda horizontal, reseta no meio da tela
+        // If the ball hits the horizontal edges, reset it
         if (this.x < this.radius || this.x > width - this.radius) {
             this.reset();
         }
 
-        // se tocar na borda vertical, inverte a velocidade
+        // If the ball hits the vertical edges, reverse its vertical direction
         if (this.y < this.radius || this.y > height - this.radius) {
             this.vy *= -1;
         }
     }
 
+    // Draws the ball
     draw() {
         fill(255);
         ellipse(this.x, this.y, 2 * this.radius, 2 * this.radius);
@@ -114,23 +94,19 @@ let bola;
 let player1;
 let player2;
 
-// função setup do p5.js
+// p5.js setup function
 function setup() {
     createCanvas(800, 400);
-    background(0);
     bola = new Bola();
     player1 = new Raquete(30);
-    player2 = new Raquete(width - 30 - 10);
+    player2 = new Raquete(width - 40);
 }
 
-// função draw do p5.js
+// p5.js draw function
 function draw() {
-    // desenha um círculo branco
     background(0);
-    bola.update();
-    bola.draw();
-    player1.update();
-    player1.draw();    
-    player2.update();
-    player2.draw();
+    [bola, player1, player2].forEach(entity => {
+        entity.update();
+        entity.draw();
+    });
 }
