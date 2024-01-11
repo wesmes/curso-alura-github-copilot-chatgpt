@@ -1,3 +1,7 @@
+let bolaImagem;
+let jogadorImagem;
+let computadorImagem;
+
 // código base do p5.js para o projeto Pong Copilot
 // Autor: Weslley Gomes
 
@@ -48,14 +52,20 @@ class Raquete {
     }
 
     draw() {
-        fill(255);
-        rect(this.x, this.y, this.width, this.height);
+
+        // quando for o jogador 1, desenha a barra do jogador 1
+        if (this.x < width / 2) {
+            image(jogadorImagem, this.x, this.y, this.width, this.height);
+        } else {
+            image(computadorImagem, this.x, this.y, this.width, this.height);
+        }
+
     }
 }
 
 class Bola {
     constructor() {
-        this.radius = 25;
+        this.radius = 12;
         this.reset();
     }
 
@@ -85,14 +95,19 @@ class Bola {
 
     // Draws the ball
     draw() {
-        fill(255);
-        ellipse(this.x, this.y, 2 * this.radius, 2 * this.radius);
+        image(bolaImagem, this.x - this.radius, this.y - this.radius, 2 * this.radius, 2 * this.radius);
     }
 }
 
 let bola;
 let player1;
 let player2;
+
+function preload() {
+    bolaImagem = loadImage('Sprites/bola.png');
+    jogadorImagem = loadImage('Sprites/barra01.png');
+    computadorImagem = loadImage('Sprites/barra02.png');
+}
 
 // p5.js setup function
 function setup() {
