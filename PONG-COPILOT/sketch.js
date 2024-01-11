@@ -76,12 +76,16 @@ class Bola {
         this.y = height / 2;
         this.vx = Math.random() * 10 - 5;
         this.vy = Math.random() * 10 - 5;
+        // current rotatory angle
+        this.angle = 0;
     }
 
     // Updates the ball's position and checks for collisions with the screen edges
     update() {
         this.x += this.vx;
         this.y += this.vy;
+        // rotate according to the ball's speed
+        this.angle += Math.sqrt(this.vx * this.vx + this.vy * this.vy) / 30;
 
         // If the ball hits the horizontal edges, reset it
         if (this.x < this.radius || this.x > width - this.radius) {
@@ -96,7 +100,13 @@ class Bola {
 
     // Draws the ball
     draw() {
-        image(bolaImagem, this.x - this.radius, this.y - this.radius, 2 * this.radius, 2 * this.radius);
+        // rotate the ball image
+        push();
+        translate(this.x, this.y);
+        rotate(this.angle);
+        imageMode(CENTER);
+        image(bolaImagem, 0, 0, 2 * this.radius, 2 * this.radius);
+        pop();
     }
 }
 
