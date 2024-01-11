@@ -1,6 +1,7 @@
 let bolaImagem;
 let jogadorImagem;
 let computadorImagem;
+let fundoImagem;
 
 // código base do p5.js para o projeto Pong Copilot
 // Autor: Weslley Gomes
@@ -107,6 +108,7 @@ function preload() {
     bolaImagem = loadImage('Sprites/bola.png');
     jogadorImagem = loadImage('Sprites/barra01.png');
     computadorImagem = loadImage('Sprites/barra02.png');
+    fundoImagem = loadImage('Sprites/fundo2.png');
 }
 
 // p5.js setup function
@@ -119,7 +121,21 @@ function setup() {
 
 // p5.js draw function
 function draw() {
-    background(0);
+
+    // centralized fundoImage, with canvas aspectRatio, and zoom out as maximum as possible
+    let canvasAspectRatio = width / height;
+    let fundoAspectRatio = fundoImagem.width / fundoImagem.height;
+    let scale = 1;
+    if (canvasAspectRatio > fundoAspectRatio) {
+        scale = width / fundoImagem.width;
+    } else {
+        scale = height / fundoImagem.height;
+    }
+    scale = Math.min(scale, 1);
+    let scaledWidth = scale * fundoImagem.width;
+    let scaledHeight = scale * fundoImagem.height;
+    image(fundoImagem, (width - scaledWidth) / 2, (height - scaledHeight) / 2, scaledWidth, scaledHeight);
+
     [bola, player1, player2].forEach(entity => {
         entity.update();
         entity.draw();
