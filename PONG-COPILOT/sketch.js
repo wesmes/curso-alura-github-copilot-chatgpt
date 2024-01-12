@@ -5,6 +5,27 @@ let fundoImagem;
 let quicarSom;
 let pontoSom;
 
+let pontosPlayer1 = 0;
+let pontosPlayer2 = 0;
+
+function falaPontos(pontosPlayer1, pontosPlayer2) {
+    let fala = new SpeechSynthesisUtterance();
+    fala.lang = 'pt-BR';
+    fala.rate = 1;
+    fala.pitch = 1;
+    fala.volume = 1;
+
+    if (pontosPlayer1 == 1) {
+        fala.text = 'Ponto do jogador 1';
+    } else if (pontosPlayer2 == 1) {
+        fala.text = 'Ponto do jogador 2';
+    } else {
+        fala.text = 'Jogador 1 ' + pontosPlayer1 + ' pontos. Jogador 2 ' + pontosPlayer2 + ' pontos.';
+    }
+
+    speechSynthesis.speak(fala);
+}
+
 // código base do p5.js para o projeto Pong Copilot
 // Autor: Weslley Gomes
 
@@ -92,7 +113,13 @@ class Bola {
 
         // If the ball hits the horizontal edges, reset it
         if (this.x < this.radius || this.x > width - this.radius) {
+            if (this.x < this.radius) {
+                pontosPlayer2++;
+            } else {
+                pontosPlayer1++;
+            }
             pontoSom.play();
+            falaPontos(pontosPlayer1, pontosPlayer2);
             this.reset();
         }
 
