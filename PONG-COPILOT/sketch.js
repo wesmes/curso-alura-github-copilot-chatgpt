@@ -2,6 +2,8 @@ let bolaImagem;
 let jogadorImagem;
 let computadorImagem;
 let fundoImagem;
+let quicarSom;
+let pontoSom;
 
 // código base do p5.js para o projeto Pong Copilot
 // Autor: Weslley Gomes
@@ -41,6 +43,7 @@ class Raquete {
 
         // If the ball hits the paddle, reverse and increase its speed
         if (this.isBallHit()) {
+            quicarSom.play();
             bola.vx *= -1.1;
         }
     }
@@ -89,6 +92,7 @@ class Bola {
 
         // If the ball hits the horizontal edges, reset it
         if (this.x < this.radius || this.x > width - this.radius) {
+            pontoSom.play();
             this.reset();
         }
 
@@ -119,6 +123,8 @@ function preload() {
     jogadorImagem = loadImage('Sprites/barra01.png');
     computadorImagem = loadImage('Sprites/barra02.png');
     fundoImagem = loadImage('Sprites/fundo2.png');
+    quicarSom = loadSound('Sons/bounce.wav');
+    pontoSom = loadSound('Sons/jingle.wav');
 }
 
 // p5.js setup function
