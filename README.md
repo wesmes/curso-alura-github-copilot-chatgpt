@@ -1,2 +1,2 @@
 # pong-copilot
-[ANDAMENTO] Curso da Alura - Github Copilot e ChatGPT
+[FINALIZADO] Curso da Alura - Github Copilot e ChatGPT
